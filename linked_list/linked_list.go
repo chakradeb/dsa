@@ -51,7 +51,7 @@ func (l *LinkedList) Insert(index int, node *Node) error {
 		l.Append(node)
 		return nil
 	}
-	curr := l.traverseToIndex(index - 1)
+	curr := l.traverseTillIndex(index - 1)
 	node.Next = curr.Next
 	curr.Next = node
 	l.Length++
@@ -70,7 +70,7 @@ func (l *LinkedList) Remove(index int) error {
 		l.Length--
 		return nil
 	}
-	curr := l.traverseToIndex(index - 1)
+	curr := l.traverseTillIndex(index - 1)
 	curr.Next = curr.Next.Next
 	if index == l.Length-1 {
 		l.Tail = curr
@@ -79,19 +79,26 @@ func (l *LinkedList) Remove(index int) error {
 	return nil
 }
 
-func (l LinkedList) traverseToIndex(index int) *Node {
-	curr := l.Head
-	for i := 0; i < index; i++ {
-		curr = curr.Next
+func (l LinkedList) IsEmpty() bool {
+	return l.Length == 0
+}
+
+func (l LinkedList) FindNodeBy(key string) int {
+	curr, index := l.Head, -1
+	for i := 0; curr.Next != nil; curr = curr.Next {
+		if curr.Key == key {
+			index = i
+		}
+		i++
 	}
-	return curr
+	return index
 }
 
 func (l LinkedList) ToString() string {
 	var sb strings.Builder
 	sb.WriteString(
-		fmt.Sprintf("{\n\tHead: %+v,\n\tTail: %+v,\n\tLength: %d,\n\tNodes: ",
-			l.Head, l.Tail, l.Length,
+		fmt.Sprintf("{\n\tHead: %s,\n\tTail: %s,\n\tLength: %d,\n\tNodes: ",
+			l.Head.ToString(), l.Tail.ToString(), l.Length,
 		),
 	)
 	for curr := l.Head; curr.Next != nil; curr = curr.Next {
@@ -101,4 +108,12 @@ func (l LinkedList) ToString() string {
 	sb.WriteString(l.Tail.ToString())
 	sb.WriteString("---> nil\n}")
 	return sb.String()
+}
+
+func (l LinkedList) traverseTillIndex(index int) *Node {
+	curr := l.Head
+	for i := 0; i < index; i++ {
+		curr = curr.Next
+	}
+	return curr
 }

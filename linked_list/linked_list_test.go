@@ -7,7 +7,7 @@ import (
 )
 
 func TestLinkedList_Append(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 	node2 := NewNode("banana", 28)
 
 	ll := NewLinkedList()
@@ -29,7 +29,7 @@ func TestLinkedList_Append(t *testing.T) {
 }
 
 func TestLinkedList_Prepend(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 	node2 := NewNode("banana", 28)
 
 	ll := NewLinkedList()
@@ -49,7 +49,7 @@ func TestLinkedList_Prepend(t *testing.T) {
 }
 
 func TestLinkedList_Insert(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 	node2 := NewNode("banana", 28)
 	node3 := NewNode("cherry", 76)
 
@@ -72,7 +72,7 @@ func TestLinkedList_Insert(t *testing.T) {
 }
 
 func TestLinkedList_Insert_IndexZero(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 
 	ll := NewLinkedList()
 	assert.Zero(t, ll.Length, "unexpected length")
@@ -86,7 +86,7 @@ func TestLinkedList_Insert_IndexZero(t *testing.T) {
 }
 
 func TestLinkedList_Insert_AtEnd(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 	node2 := NewNode("banana", 28)
 
 	ll := NewLinkedList()
@@ -104,7 +104,7 @@ func TestLinkedList_Insert_AtEnd(t *testing.T) {
 }
 
 func TestLinkedList_Insert_WhenInvalidIndex(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 
 	ll := NewLinkedList()
 	err := ll.Insert(5, node1)
@@ -115,7 +115,7 @@ func TestLinkedList_Insert_WhenInvalidIndex(t *testing.T) {
 }
 
 func TestLinkedList_Remove(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 	node2 := NewNode("banana", 28)
 	node3 := NewNode("cherry", 76)
 
@@ -137,7 +137,7 @@ func TestLinkedList_Remove(t *testing.T) {
 }
 
 func TestLinkedList_Remove_FirstElement(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 	node2 := NewNode("banana", 28)
 
 	ll := NewLinkedList()
@@ -158,7 +158,7 @@ func TestLinkedList_Remove_FirstElement(t *testing.T) {
 }
 
 func TestLinkedList_Remove_LastElement(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 	node2 := NewNode("banana", 28)
 
 	ll := NewLinkedList()
@@ -188,16 +188,49 @@ func TestLinkedList_Remove_WhenEmpty(t *testing.T) {
 }
 
 func TestLinkedList_Remove_WhenInvalidIndex(t *testing.T) {
+	node1 := NewNode("apple", 35)
+
 	ll := NewLinkedList()
-	assert.Zero(t, ll.Length, "unexpected length")
+	ll.Append(node1)
+	assert.Equal(t, 1, ll.Length, "unexpected length")
 
 	err := ll.Remove(4)
 	assert.EqualError(t, err, "invalid index for current linked list", "unexpected error")
-	assert.Zero(t, ll.Length, "unexpected length")
+	assert.Equal(t, 1, ll.Length, "unexpected length")
+}
+
+func TestLinkedList_FindNodeBy(t *testing.T) {
+	node1 := NewNode("apple", 35)
+	node2 := NewNode("banana", 28)
+	node3 := NewNode("cherry", 76)
+
+	ll := NewLinkedList()
+	ll.Append(node1)
+	ll.Append(node2)
+	ll.Append(node3)
+	assert.Equal(t, 3, ll.Length, "unexpected length")
+
+	index := ll.FindNodeBy("banana")
+	assert.Equal(t, 1, index, "unexpected index")
+}
+
+func TestLinkedList_FindNodeBy_WhenInvalidKey(t *testing.T) {
+	node1 := NewNode("apple", 35)
+	node2 := NewNode("banana", 28)
+	node3 := NewNode("cherry", 76)
+
+	ll := NewLinkedList()
+	ll.Append(node1)
+	ll.Append(node2)
+	ll.Append(node3)
+	assert.Equal(t, 3, ll.Length, "unexpected length")
+
+	index := ll.FindNodeBy("mango")
+	assert.Equal(t, -1, index, "unexpected index")
 }
 
 func TestLinkedList_ToString(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 	node2 := NewNode("banana", 28)
 	var sb strings.Builder
 
@@ -217,7 +250,7 @@ func TestLinkedList_ToString(t *testing.T) {
 }
 
 func TestLinkedList_traverseToIndex(t *testing.T) {
-	node1 := NewNode("apple", 32)
+	node1 := NewNode("apple", 35)
 	node2 := NewNode("banana", 28)
 	node3 := NewNode("cherry", 76)
 
@@ -229,6 +262,6 @@ func TestLinkedList_traverseToIndex(t *testing.T) {
 	ll.Append(node3)
 	assert.Equal(t, 3, ll.Length, "unexpected length")
 
-	expected := ll.traverseToIndex(1)
+	expected := ll.traverseTillIndex(1)
 	assert.Equal(t, node2.ToString(), expected.ToString(), "unexpected node in traversal")
 }
