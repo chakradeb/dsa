@@ -25,9 +25,6 @@ func (n *Node) UpdateNext(node *Node) {
 
 func (n Node) ToString() string {
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("[ %s: %d ]--->", n.Key, n.Value))
-	if n.Next == nil {
-		sb.WriteString(" nil")
-	}
+	sb.WriteString(fmt.Sprintf("[ %s: %d ]", n.Key, n.Value))
 	return sb.String()
 }

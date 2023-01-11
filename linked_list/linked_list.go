@@ -12,32 +12,43 @@ type LinkedList struct {
 	Length int
 }
 
-func NewLinkedList(node *Node) *LinkedList {
+func NewLinkedList() *LinkedList {
 	return &LinkedList{
-		Head:   node,
-		Tail:   node,
-		Length: 1,
+		Head:   nil,
+		Tail:   nil,
+		Length: 0,
 	}
 }
 
-func (l *LinkedList) Append(node *Node) {
-	l.Tail.Next = node
-	l.Tail = node
-	l.Length++
-}
-
 func (l *LinkedList) Prepend(node *Node) {
+	if l.Tail == nil {
+		l.Tail = node
+	}
 	node.UpdateNext(l.Head)
 	l.Head = node
 	l.Length++
 }
 
+func (l *LinkedList) Append(node *Node) {
+	if l.Length == 0 {
+		l.Prepend(node)
+		return
+	}
+	l.Tail.Next = node
+	l.Tail = node
+	l.Length++
+}
+
 func (l *LinkedList) Insert(index int, node *Node) error {
-	if index < 0 || index >= l.Length {
+	if index < 0 || index > l.Length {
 		return errors.New("invalid index for current linked list")
 	}
 	if index == 0 {
 		l.Prepend(node)
+		return nil
+	}
+	if index == l.Length {
+		l.Append(node)
 		return nil
 	}
 	curr := l.traverseToIndex(index - 1)
@@ -48,6 +59,9 @@ func (l *LinkedList) Insert(index int, node *Node) error {
 }
 
 func (l *LinkedList) Remove(index int) error {
+	if l.Length == 0 {
+		return errors.New("linked list is already empty")
+	}
 	if index < 0 || index >= l.Length {
 		return errors.New("invalid index for current linked list")
 	}
@@ -82,8 +96,9 @@ func (l LinkedList) ToString() string {
 	)
 	for curr := l.Head; curr.Next != nil; curr = curr.Next {
 		sb.WriteString(curr.ToString())
+		sb.WriteString("--->")
 	}
 	sb.WriteString(l.Tail.ToString())
-	sb.WriteString("\n}")
+	sb.WriteString("---> nil\n}")
 	return sb.String()
 }

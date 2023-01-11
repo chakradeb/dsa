@@ -11,7 +11,7 @@ func TestNode_ToString(t *testing.T) {
 	key := "apple"
 	value := 32
 	n := NewNode(key, value)
-	assert.Equal(t, fmt.Sprintf("[ %s: %d ]---> nil", key, value), n.ToString(), "unexpected toString representation")
+	assert.Equal(t, fmt.Sprintf("[ %s: %d ]", key, value), n.ToString(), "unexpected toString representation")
 }
 
 func TestNode_UpdateNext(t *testing.T) {
